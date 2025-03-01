@@ -1,0 +1,39 @@
+[
+  {
+    "id": "flappybird",
+    "title": "Flappy Bird",
+    "image": "../public/images/flappy-bird-feat.jpg",
+    "description": "Tap to navigate a bird through obstacle!"
+  },
+  {
+    "id": "dinosaur",
+    "title": "Dino Game",
+    "image": "../public/images/dinosaur.jpg",
+    "description": "Assist the dinosaur T-Rex across the vast desert"
+  },
+  {
+    "id": "turtle",
+    "title": "Turtle Academy",
+    "image": "../public/images/turtle.gif",
+    "description": "Learn coding with fun! Turtle Academy makes programming easy!"
+  },
+  {
+      "id": "mario123",
+      "title": "Super Mario",
+      "image": "https://upload.wikimedia.org/wikipedia/en/5/50/NES_Super_Mario_Bros.png",
+      "description": "A classic adventure game with Mario!"
+    },
+    {
+      "id": "osmos",
+      "title": "Osmos",
+      "image": "../public/images/Osmos4a.png",
+      "description": "Absorb, grow, and explore physics-based microbial worlds."
+    },
+    {
+      "id": "minecraft789",
+      "title": "Minecraft",
+      "image": "https://upload.wikimedia.org/wikipedia/en/c/c9/Minecraft_Mobs.png",
+      "description": "A sandbox game where you can build anything!"
+    }
+
+  ]
