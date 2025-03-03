@@ -1,42 +1,38 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import "../css/Navbar.css";
+import userAvatar from "../assets/avatar.png"; 
 
-const Navbar = () => {
+const Navbar = ({ userEmail }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow">
-      <div className="container">
-        {/* Brand Logo */}
-        <Link className="navbar-brand fw-bold" to="/">BusyPad</Link>
+    <nav className="navbar">
+      <button className="menu-button" onClick={toggleMenu}>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <Link className="navbar-brand" to="/">BusyPad</Link>
+      
+      <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
+        <Link to="/" onClick={() => setIsMenuOpen(false)}>All Games</Link>
+        <Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
+      </div>
 
-        {/* Toggle Button for Mobile */}
-        <button 
-          className="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        {/* Navigation Links */}
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto"> 
-            <li className="nav-item">
-              <Link className="nav-link" to="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/games">Games</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/about">About</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/contact">Contact</Link>
-            </li>
-          </ul>
-        </div>
+      <div
+        className="user-avatar-container"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        <img src={userAvatar} alt="User Avatar" className="user-avatar" />
+        {showTooltip && <div className="tooltip">{userEmail}</div>}
       </div>
     </nav>
   );
