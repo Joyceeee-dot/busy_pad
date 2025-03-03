@@ -1,7 +1,7 @@
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
 
-import "../Aurora.css";
+import "../css/Aurora.css";
 
 const VERT = `#version 300 es
 in vec2 position;
@@ -113,9 +113,9 @@ void main() {
 
 export default function Aurora(props) {
   const {
-    colorStops = ["#00d8ff", "#7cff67", "#00d8ff"] ,
-    amplitude = 1.0,
-    blend = 0.5
+    colorStops = ["#000000", "#D4145A", "#FBB03B", "#662D8C"] ,
+    amplitude = 0.5,
+    blend = 0.3
   } = props;
   const propsRef = useRef(props);
   propsRef.current = props;
@@ -132,10 +132,10 @@ export default function Aurora(props) {
       antialias: true
     });
     const gl = renderer.gl;
-    gl.clearColor(0, 0, 0, 0);
+    gl.clearColor(1, 1, 1, 1);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-    gl.canvas.style.backgroundColor = '#000000'; 
+    gl.canvas.style.backgroundColor = 'transparent'; 
     let program;
 
     function resize() {

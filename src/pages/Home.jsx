@@ -3,9 +3,10 @@ import axios from "axios";
 import GameCard from "../components/GameCard";
 import Navbar from "../components/Navbar";
 import gamesData from "../data/games.json";
-
+import "../css/Home.css";
 const Home = () => {
   const [games, setGames] = useState([]);
+  const [activeTab, setActiveTab] = useState("all-games");
   const API_URL = "http://backend-ip:5000/games"; // Real API
 
   useEffect(() => {
@@ -24,25 +25,27 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <Navbar />
+    <div className="home-container">
+      <Navbar userEmail="user@example.com" />
 
-      {/* main content */}
-      <div className="container mt-5 pt-4 text-center">
-        <h1 className="text-center mb-4">All Games</h1>
-
-        {/*  GameCard */}
-        <div className="row justify-content-center gx-4 gy-4">
-          {games.length > 0 ? (
-            games.map((game) => (
-              <div className="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-center" key={game.id}>
-                <GameCard {...game} />
-              </div>
-            ))
-          ) : (
-            <p className="text-center">Loading games...</p>
-          )}
-        </div>
+      {/* Tab */}
+      <div className="content">
+        {activeTab === "all-games" ? (
+          <div className="games-grid">
+            {games.length > 0 ? (
+              games.map((game) => (
+                <GameCard key={game.id} {...game} />
+              ))
+            ) : (
+              <p className="loading-text">Loading games...</p>
+            )}
+          </div>
+        ) : (
+          <div className="about-section">
+            <h2>About BusyPad</h2>
+            <p>This is the About section.</p>
+          </div>
+        )}
       </div>
     </div>
   );

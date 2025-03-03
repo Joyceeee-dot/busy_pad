@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css"; 
-import "../Login.css"; 
+import "../css/Login.css"; 
 import Aurora from "../components/Aurora";
 
 const USER_DATA_URL = "/users.json";
@@ -75,17 +75,11 @@ const Login = () => {
   return (
     <div>
       < Aurora 
-        colorStops={["#fddb92","#d1fdff", "ffffff"]}
-        blend={0.5}
-        amplitude={1.0}
-        speed={0.5}
+        colorStops={["#000000", "#6A3093", "#A044FF", "#0F2027"]}
+        blend={0.4}
+        amplitude={0.8}
+        speed={0.6}
         />
-      {/* < Aurora 
-      colorStops={["#fddb92","#d1fdff", "ffffff"]}
-      blend={0.5}
-      amplitude={1.0}
-      speed={0.5}
-      /> */}
       <div className="login-container">
         {/* Login form */}
         <div className="login-form">
