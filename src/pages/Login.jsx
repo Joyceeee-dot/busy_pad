@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css"; 
-import "../css/Login.css"; 
 import Aurora from "../components/Aurora";
+import "../css/Login.css"; 
+// import { auth } from "../firebase"; we will use this later
 
 const USER_DATA_URL = "/users.json";
 
@@ -14,9 +14,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  //const API_URL = "http://your-backend-api.com/login"; 
-  // change const API_URL = process.env.REACT_APP_API_URL || "http://backend-api.com/login"
 
   //Mock user data
   useEffect(()=> {

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import GameCard from "../components/GameCard";
 import Navbar from "../components/Navbar";
 import gamesData from "../data/games.json";
 import "../css/Home.css";
+//import { db } from "../firebase";  we will use this later
+
 const Home = () => {
   const [games, setGames] = useState([]);
   const [activeTab, setActiveTab] = useState("all-games");
-  const API_URL = "http://backend-ip:5000/games"; // Real API
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -26,7 +26,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <Navbar userEmail="user@example.com" />
+      <Navbar userEmail="user@example.com" activeTab={activeTab} setActiveTab={setActiveTab}/>
 
       {/* Tab */}
       <div className="content">

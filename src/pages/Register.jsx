@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/Register.css'; 
 import Aurora from "../components/Aurora";
+import '../css/Register.css'; 
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// import { doc, setDoc } from "firebase/firestore";
+// import { auth, db } from "../firebase"; // we will use it later
 
 const Register = () => {
   const navigate = useNavigate();
