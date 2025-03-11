@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../css/Navbar.css";
 import userAvatar from "../assets/avatar.png"; 
 
 const Navbar = ({ userEmail }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -19,11 +20,23 @@ const Navbar = ({ userEmail }) => {
         <span></span>
       </button>
       
-      <Link className="navbar-brand" to="/">BusyPad</Link>
+      <div className="navbar-brand" to="/">BusyPad</div>
       
       <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-        <Link to="/" onClick={() => setIsMenuOpen(false)}>All Games</Link>
-        <Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link>
+        <Link 
+          className={`nav-link ${location.pathname === "/home" ? "active" : ""}`} 
+          to="/home"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          All Games
+        </Link>
+        <Link 
+          className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} 
+          to="/about"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          About
+        </Link>
       </div>
 
       <div

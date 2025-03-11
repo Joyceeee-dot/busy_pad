@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/Register.css'; 
 import Aurora from "../components/Aurora";
+import '../css/Register.css'; 
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// import { doc, setDoc } from "firebase/firestore";
+// import { auth, db } from "../firebase"; // we will use it later
 
 const Register = () => {
   const navigate = useNavigate();
@@ -72,7 +75,7 @@ const Register = () => {
         />
     <div className="register-container">
       <div className="register-box">
-        <h2 className="register-title">Register</h2>
+        <h2 className="register-title">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <input
@@ -127,7 +130,7 @@ const Register = () => {
           <p className="register-link">
             Already have an account?{' '}
             <span className="register-login-link" onClick={() => navigate('/login')}>
-              Login
+              Log In
             </span>
           </p>
         </form>
