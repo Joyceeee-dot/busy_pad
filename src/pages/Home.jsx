@@ -8,6 +8,7 @@ import "../css/Home.css";
 const Home = () => {
   const [games, setGames] = useState([]);
   const [activeTab, setActiveTab] = useState("all-games");
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -24,6 +25,11 @@ const Home = () => {
     fetchGames();
   }, []);
 
+  const filteredGames = games.filter(game => {
+    if (filter === "all") return true;
+    return game.category === filter;
+  });
+
   return (
     <div className="home-container">
       <Navbar userEmail="user@example.com" activeTab={activeTab} setActiveTab={setActiveTab}/>
@@ -31,15 +37,28 @@ const Home = () => {
       {/* Tab */}
       <div className="content">
         {activeTab === "all-games" ? (
-          <div className="games-grid">
-            {games.length > 0 ? (
-              games.map((game) => (
-                <GameCard key={game.id} {...game} />
-              ))
-            ) : (
-              <p className="loading-text">Loading games...</p>
-            )}
+          <div>
+          {/* Select Filter */}
+          <div className="filter-container">
+            <label htmlFor="category">Category </label>
+            <select id="category" value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <option value="all">All</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="educational">Educational</option>
+            </select>
           </div>
+
+          {/* Games Grid */}
+          <div className="games-grid">
+              {filteredGames.length > 0 ? (
+                filteredGames.map((game) => (
+                  <GameCard key={game.id} {...game} />
+                ))
+              ) : (
+                <p className="loading-text">No games found...</p>
+              )}
+            </div>
+          </div> 
         ) : (
           <div className="about-section">
             <h2>About BusyPad</h2>

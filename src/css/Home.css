@@ -29,7 +29,7 @@
   .tab.active {
     background-color: #666;
     cursor: default;
-    pointer-events: none; /* 禁止点击 */
+    pointer-events: none; 
   }
   
   .games-grid {
@@ -48,20 +48,39 @@
     color: white;
   }
 
+  .filter-container {
+    margin-bottom: 15px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .filter-container label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .filter-container select {
+    padding: 5px;
+    font-size: 16px;
+  }
+
   @media screen and (max-width: 1024px) {
     .games-grid {
-      grid-template-columns: repeat(3, minmax(250px, 1fr)); /* 在平板上减少列数 */
+      grid-template-columns: repeat(3, minmax(250px, 1fr)); 
     }
   }
   
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 820px) {
     .games-grid {
-      grid-template-columns: repeat(2, minmax(250px, 1fr)); /* 在小屏幕上一行显示 2 个 */
+      grid-template-columns: repeat(2, minmax(250px, 1fr)); 
     }
   }
   
   @media screen and (max-width: 480px) {
     .games-grid {
-      grid-template-columns: repeat(1, 1fr); /* 在手机上一行显示 1 个 */
+      grid-template-columns: repeat(1, 1fr); 
     }
   }

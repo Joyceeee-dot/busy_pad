@@ -122,7 +122,7 @@ const Login = () => {
 
           {/* Register Link */}
           <p className="register-link">
-            Don't have an account? <Link to="/register">Register</Link>
+            Don't have an account? <Link to="/register">Sign Up</Link>
           </p>
 
           {/* Error message */}

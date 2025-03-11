@@ -3,37 +3,43 @@
     "id": "flappybird",
     "title": "Flappy Bird",
     "image": "../public/images/flappy-bird-feat.jpg",
-    "description": "Tap to navigate a bird through obstacle!"
+    "description": "Tap to navigate a bird through obstacle!",
+    "category": "entertainment"
   },
   {
     "id": "dinosaur",
     "title": "Dino Game",
     "image": "../public/images/dinosaur.jpg",
-    "description": "Assist the dinosaur T-Rex across the vast desert"
+    "description": "Assist the dinosaur T-Rex across the vast desert",
+    "category": "entertainment"
   },
   {
     "id": "turtle",
     "title": "Turtle Academy",
     "image": "../public/images/turtle.gif",
-    "description": "Learn coding with fun! Turtle Academy makes programming easy!"
+    "description": "Learn coding with fun! Turtle Academy makes programming easy!",
+    "category": "educational"
   },
   {
       "id": "mario123",
       "title": "Super Mario",
       "image": "https://upload.wikimedia.org/wikipedia/en/5/50/NES_Super_Mario_Bros.png",
-      "description": "A classic adventure game with Mario!"
+      "description": "A classic adventure game with Mario!",
+      "category": "entertainment"
     },
     {
       "id": "osmos",
       "title": "Osmos",
       "image": "../public/images/Osmos4a.png",
-      "description": "Absorb, grow, and explore physics-based microbial worlds."
+      "description": "Absorb, grow, and explore physics-based microbial worlds.",
+      "category": "educational"
     },
     {
       "id": "minecraft789",
       "title": "Minecraft",
       "image": "https://upload.wikimedia.org/wikipedia/en/c/c9/Minecraft_Mobs.png",
-      "description": "A sandbox game where you can build anything!"
+      "description": "A sandbox game where you can build anything!",
+      "category": "educational"
     }
 
   ]
