@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import userAvatar from "../assets/avatar.png"; 
 
@@ -7,6 +7,7 @@ const Navbar = ({ userEmail }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -43,6 +44,8 @@ const Navbar = ({ userEmail }) => {
         className="user-avatar-container"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
+        onClick={() => navigate('/user-management')}
+        style={{ cursor: "pointer" }}
       >
         <img src={userAvatar} alt="User Avatar" className="user-avatar" />
         {showTooltip && <div className="tooltip">{userEmail}</div>}

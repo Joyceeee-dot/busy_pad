@@ -1,3 +1,6 @@
 [
-    { "email": "test@example.com", "password": "1234567" }
+    { "userId": "test",
+    "email": "test@example.com", 
+    "password": "1234567", 
+    "allowList":["flappybird"]    }
   ]

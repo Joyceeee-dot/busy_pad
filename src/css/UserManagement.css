@@ -1,0 +1,174 @@
+.user-management-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.user-management-content {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-management-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+  
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+  
+.user-info p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+  
+.allow-list-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+  
+.allow-list-container h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.help-text {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+  
+.allow-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+  
+.allow-list-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.allow-list-item .game-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+  
+.allow-list-item:last-child {
+    border-bottom: none;
+}
+
+.allow-list-item:hover {
+    background-color: #f8f9fa;
+}
+  
+.game-thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+  
+.allow-list-item span {
+    font-size: 16px;
+    color: #333;
+}
+
+.switch-container {
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+}
+
+/* MUI Switch Custom Styles */
+.MuiSwitch-root {
+    width: 42px !important;
+    height: 26px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.MuiSwitch-switchBase {
+    padding: 0 !important;
+    margin: 2px !important;
+    transition: all 0.2s ease !important;
+}
+
+.MuiSwitch-thumb {
+    width: 22px !important;
+    height: 22px !important;
+    background-color: #fff !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+.MuiSwitch-track {
+    border-radius: 13px !important;
+    background-color: #e9ecef !important;
+    opacity: 1 !important;
+    transition: all 0.2s ease !important;
+}
+
+.Mui-checked {
+    color: #a06eda !important;
+    transform: translateX(16px) !important;
+}
+
+.Mui-checked + .MuiSwitch-track {
+    background-color: #a06eda !important;
+    opacity: 0.8 !important;
+}
+
+.confirm-button {
+    display: block;
+    width: 200px;
+    padding: 12px 24px;
+    margin: 30px auto 0;
+    background-color: #a06eda;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.confirm-button:hover {
+    background-color: #a06eda;
+}
+
+.confirm-button:active {
+    transform: translateY(1px);
+}
+
+.loading-text {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin: 40px 0;
+}
