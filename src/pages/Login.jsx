@@ -1,19 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; 
 import Aurora from "../components/Aurora";
 import "../css/Login.css"; 
-// import { auth } from "../firebase"; we will use this later
-
-// Mock user data for development
-const MOCK_USERS = [
-  {
-    email: "test@example.com",
-    password: "password123",
-    deviceCode: "TEST001",
-    allowList: []
-  }
-];
+import { userApi, tokenService } from "../services/api";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -22,18 +12,6 @@ const Login = ({ setUser }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const savedUserData = localStorage.getItem("userData");
-    
-    if (isLoggedIn && savedUserData) {
-      setUser(JSON.parse(savedUserData));
-      navigate("/home");
-    }
-  }, [navigate, setUser]);
-
-  // submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -54,34 +32,20 @@ const Login = ({ setUser }) => {
     try {
       setLoading(true);
 
-      // For development, use mock data
-      const user = MOCK_USERS.find(
-        (u) => u.email === trimmedEmail && u.password === trimmedPassword
-      );
-
-      if (user) {
-        // Initialize user data with empty allowList if not present
-        const userData = {
-          ...user,
-          allowList: user.allowList || []
-        };
-
-        // Save user data
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userEmail", user.email);
-        localStorage.setItem("userData", JSON.stringify(userData));
-        
-        // Set user data in App state
-        setUser(userData);
-        
-        // Navigate to home page
-        navigate("/home");
-      } else {
-        setError("Invalid email or password. Please try again.");
-      }
+      // Call login API
+      const response = await userApi.login(trimmedEmail, trimmedPassword);
+      
+      // Set user data in App state
+      setUser({
+        email: trimmedEmail,
+        isLoggedIn: true
+      });
+      
+      // Navigate to home page
+      navigate("/home");
     } catch (err) {
       console.error("Login error:", err);
-      setError("Error processing login. Please try again.");
+      setError(err.message || "Error processing login. Please try again.");
     } finally {
       setLoading(false);
     }
