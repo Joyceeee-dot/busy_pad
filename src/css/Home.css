@@ -5,6 +5,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
   }
   
   .tabs {
@@ -34,27 +37,23 @@
   
   .games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
-    padding: 30px;
+    padding: 20px;
     justify-content: center;
     max-width: 1300px;
     width: 100%;
   }
 
-  
-  .loading-text {
-    font-size: 18px;
-    color: white;
+  .content {
+    margin-top: 20px;
   }
 
   .filter-container {
-    margin-bottom: 15px;
-    text-align: center;
+    margin-bottom: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+    justify-content: flex-end;
+    padding: 0 20px;
   }
   
   .filter-container label {
@@ -65,6 +64,49 @@
   .filter-container select {
     padding: 5px;
     font-size: 16px;
+  }
+
+  .category-filter {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: 2px solid #a06eda;
+    border-radius: 8px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .category-filter:hover {
+    border-color: #8344c5;
+  }
+
+  .category-filter:focus {
+    border-color: #8344c5;
+    box-shadow: 0 0 0 2px rgba(160, 110, 218, 0.2);
+  }
+
+  .no-games-text {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #666;
+    font-size: 18px;
+    padding: 40px;
+  }
+
+  .about-section {
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .loading-text {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin: 40px 0;
   }
 
   @media screen and (max-width: 1024px) {
@@ -82,5 +124,22 @@
   @media screen and (max-width: 480px) {
     .games-grid {
       grid-template-columns: repeat(1, 1fr); 
+    }
+  }
+
+  @media (max-width: 768px) {
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .filter-container {
+        padding: 0 15px;
+    }
+
+    .category-filter {
+        width: 100%;
+        max-width: 200px;
     }
   }
