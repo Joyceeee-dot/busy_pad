@@ -117,3 +117,9 @@
   transform: none;
   box-shadow: none;
 }
+
+@media (max-width: 820px) {
+  .game-card-container {
+    max-height: 370px;
+  }
+}
