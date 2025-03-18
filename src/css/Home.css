@@ -75,6 +75,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    background: white;
 }
 
 .game-header {
@@ -85,6 +86,8 @@
     width: 100%;
     background: white;
     z-index: 1;
+    height: 60px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .game-header h3 {
@@ -111,6 +114,7 @@
     height: calc(100% - 60px);
     overflow: hidden;
     position: relative;
+    background: white;
 }
 
 .game-frame {

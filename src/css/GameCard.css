@@ -6,6 +6,8 @@
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease;
   margin: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-card-container:hover {
@@ -47,6 +49,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  flex: 1;
 }
 
 .game-card-title {
@@ -62,6 +65,7 @@
   margin: 0;
   text-align: center;
   line-height: 1.4;
+  flex: 1;
 }
 
 .game-card-status {
@@ -95,6 +99,7 @@
   font-weight: 500;
   transition: all 0.3s ease;
   width: 100%;
+  margin-top: auto;
 }
 
 .play-now-btn:hover:not(:disabled) {

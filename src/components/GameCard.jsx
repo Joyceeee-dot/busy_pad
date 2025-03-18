@@ -2,7 +2,7 @@ import React from "react";
 import "../css/GameCard.css";
 import { gamesApi, tokenService } from "../services/api";
 
-const GameCard = ({ title, description, image_url, id, is_playable, onPlay }) => {
+const GameCard = ({ title, description, image_url, id, is_playable, onPlay, showPlayButton = true }) => {
   const handlePlayNow = async () => {
     if (!is_playable) {
       alert("This game is currently locked. Please contact support for access.");
@@ -53,13 +53,15 @@ const GameCard = ({ title, description, image_url, id, is_playable, onPlay }) =>
             {is_playable ? 'Available' : 'Locked'}
           </span> */}
         </div>
-        <button 
-          className={`play-now-btn ${!is_playable ? 'locked' : ''}`} 
-          onClick={handlePlayNow}
-          disabled={!is_playable}
-        >
-          {is_playable ? 'Play Now' : 'Locked'}
-        </button>
+        {showPlayButton && (
+          <button 
+            className={`play-now-btn ${!is_playable ? 'locked' : ''}`} 
+            onClick={handlePlayNow}
+            disabled={!is_playable}
+          >
+            {is_playable ? 'Play Now' : 'Locked'}
+          </button>
+        )}
       </div>
     </div>
   );
