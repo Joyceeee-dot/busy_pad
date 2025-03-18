@@ -108,15 +108,15 @@ const UserManagement = ({ user, setUser }) => {
         </div>
 
         <div className="allow-list-container">
-          <h3>Game Access Control</h3>
+          <h3>Parental Control</h3>
           <p className="help-text">Toggle switches to control which games are playable.</p>
           <ul className="allow-list">
             {tempGames.map((game) => (
               <li key={game.id} className="allow-list-item">
                 <div className="game-info">
-                  <span className="game-name">{game.name}</span>
+                  <span className="game-name">{game.title}</span>
                   <span className={`game-status ${game.is_playable ? 'available' : 'locked'}`}>
-                    {game.is_playable ? 'Available' : 'Locked'}
+                    {game.is_playable ? '' : ''}
                   </span>
                 </div>
                 <div className="switch-container">

@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import userAvatar from "../assets/avatar.png"; 
+import { tokenService } from "../services/api";
 
-const Navbar = ({ userEmail }) => {
+const Navbar = ({ userEmail, isDeviceUser = false }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -11,6 +12,12 @@ const Navbar = ({ userEmail }) => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    tokenService.removeToken();
+    localStorage.removeItem('userData');
+    navigate('/login');
   };
 
   return (
@@ -40,15 +47,30 @@ const Navbar = ({ userEmail }) => {
         </Link>
       </div>
 
-      <div
-        className="user-avatar-container"
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-        onClick={() => navigate('/user-management')}
-        style={{ cursor: "pointer" }}
-      >
-        <img src={userAvatar} alt="User Avatar" className="user-avatar" />
-        {showTooltip && <div className="tooltip">{userEmail}</div>}
+      <div className="user-section" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <div
+          className={`user-avatar-container ${isDeviceUser ? 'device-user' : ''}`}
+          onMouseEnter={!isDeviceUser ? () => setShowTooltip(true) : undefined}
+          onMouseLeave={!isDeviceUser ? () => setShowTooltip(false) : undefined}
+          onClick={!isDeviceUser ? () => navigate('/user-management') : undefined}
+        >
+          <img src={userAvatar} alt="User Avatar" className="user-avatar" />
+          {showTooltip && <div className="tooltip">{userEmail}</div>}
+        </div>
+        <button 
+          onClick={handleLogout}
+          className="nav-link"
+          style={{ 
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '8px 16px',
+            fontSize: 'inherit',
+            fontFamily: 'inherit'
+          }}
+        >
+          Log Out
+        </button>
       </div>
     </nav>
   );

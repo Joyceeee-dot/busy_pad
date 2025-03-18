@@ -243,3 +243,12 @@
         padding: 6px 12px;
     }
 }
+
+.user-avatar-container.device-user {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+.user-avatar-container.device-user * {
+    pointer-events: none !important;
+}

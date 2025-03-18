@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/GameCard.css";
 
-const GameCard = ({ title, image, description, id, is_playable }) => {
+const GameCard = ({ title, description, image_url, id, is_playable }) => {
   const handlePlayNow = async () => {
     if (!is_playable) {
       alert("This game is currently locked. Please contact support for access.");
@@ -18,10 +18,19 @@ const GameCard = ({ title, image, description, id, is_playable }) => {
     }
   };
 
+  const handleImageError = (e) => {
+    console.error(`Error loading image for game: ${title}`, e);
+    e.target.src = './images/game-place-holder.jpg';
+  };
+
   return (
     <div className="game-card-container">
       <div className="game-card-image">
-        <img src={image} alt={title} />
+        <img 
+          src={image_url} 
+          alt={title} 
+          onError={handleImageError}
+        />
         {!is_playable && <div className="game-locked-overlay">
           <span>🔒</span>
         </div>}

@@ -122,3 +122,34 @@
     }
 
   }
+
+.login-method-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 5px;
+  background: rgba(248, 248, 249, 0.1);
+  border-radius: 8px;
+}
+
+.toggle-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(91, 61, 158, 0.7);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  background: rgba(208, 165, 227, 0.2);
+  color: rgba(41, 15, 97, 0.7);
+}
+
+.toggle-btn:hover:not(.active) {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}

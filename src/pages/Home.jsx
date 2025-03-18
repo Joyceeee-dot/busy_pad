@@ -10,9 +10,10 @@ const Home = ({ userId, user, setUser }) => {
   const [activeTab, setActiveTab] = useState("all-games");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Load Game Data and Check Authentication
+  // Load Game Data
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -22,29 +23,22 @@ const Home = ({ userId, user, setUser }) => {
           return;
         }
 
-        // Load saved user data if not already in state
-        if (!user) {
-          const savedUserData = localStorage.getItem("userData");
-          if (savedUserData) {
-            setUser(JSON.parse(savedUserData));
-          } else {
-            navigate('/login');
-            return;
-          }
-        }
-
-        // Fetch games from API
         const gamesData = await gamesApi.getAllGames(token);
-        setGames(Array.isArray(gamesData) ? gamesData : []);
+        setGames(gamesData);
+        setError(null);
       } catch (error) {
         console.error("Error loading data:", error);
+        setError(error.message);
+        if (error.message === 'Session expired') {
+          navigate('/login');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     loadData();
-  }, [navigate, setUser, user]);
+  }, [navigate, user]);
 
   // Show loading state while data is being loaded
   if (loading) {
@@ -78,7 +72,7 @@ const Home = ({ userId, user, setUser }) => {
                 className="category-filter"
               >
                 <option value="all">All Categories</option>
-                <option value="entertainment">Entertainment</option>
+                <option value="fun">Entertainment</option>
                 <option value="educational">Education</option>
               </select>
             </div>

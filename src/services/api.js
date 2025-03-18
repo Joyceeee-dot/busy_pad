@@ -45,6 +45,49 @@ export const userApi = {
         }
     },
 
+    // Device login
+    deviceLogin: async (deviceCode) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/device`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    device_code: deviceCode
+                })
+            });
+
+            const data = await response.json();
+            console.log('Device login response:', data); // Log the response data
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Device login failed');
+            }
+
+            // Store the token - use data.token instead of data.access_token
+            const token = data.token;
+            if (!token) {
+                throw new Error('No access token received');
+            }
+
+            tokenService.setToken(token);
+            
+            // Store device user data
+            const userData = {
+                email: `Device-${deviceCode}`,
+                isLoggedIn: true
+            };
+            localStorage.setItem("userData", JSON.stringify(userData));
+            localStorage.setItem("isLoggedIn", "true");
+
+            return data;
+        } catch (error) {
+            console.error('Device login error:', error);
+            throw error;
+        }
+    },
+
     // Register user
     signup: async (email, password, name, deviceCode) => {
         try {
@@ -97,37 +140,80 @@ export const userApi = {
     },
 };
 
-// Games related API calls
+// Games API calls
 export const gamesApi = {
-    // Get all games
+    // Get all games for admin
     getAllGames: async (token) => {
         try {
             const response = await fetch(`${API_BASE_URL}/admin/games`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
             
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to get games');
+                if (response.status === 401) {
+                    tokenService.removeToken();
+                    localStorage.removeItem('userData');
+                    throw new Error('Session expired');
+                }
+                throw new Error('Failed to get games');
             }
 
             const data = await response.json();
             const defaultImage = '/images/game-place-holder.jpg';
             
-            // 处理每个游戏的数据，设置默认值
-            const processedGames = (data.games || []).map(game => ({
-                ...game,
+            // Process games with default values
+            return data.games.map(game => ({
+                id: game.id,
                 title: game.name,
-                image: game.image || defaultImage,
-                description: game.description || 'No description'
+                image_url: game.image_url || defaultImage,
+                description: game.description || 'No description',
+                is_playable: game.is_playable,
+                url: game.url,
+                category: game.category
             }));
-
-            return processedGames;
         } catch (error) {
             console.error('Get games error:', error);
+            throw error;
+        }
+    },
+
+    // Get games for device users
+    getPlayerGames: async (token) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/player/games`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    tokenService.removeToken();
+                    localStorage.removeItem('userData');
+                    throw new Error('Session expired');
+                }
+                throw new Error('Failed to get games');
+            }
+
+            const data = await response.json();
+            const defaultImage = '/images/game-place-holder.jpg';
+            
+            // Process games with default values
+            return data.games.map(game => ({
+                id: game.id,
+                title: game.name,
+                image_url: game.image_url || defaultImage,
+                description: game.description || 'No description',
+                is_playable: true, // All games from player/games are playable
+                url: game.url,
+                category: game.category
+            }));
+        } catch (error) {
+            console.error('Get player games error:', error);
             throw error;
         }
     },

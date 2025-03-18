@@ -6,17 +6,19 @@ import "../css/Login.css";
 import { userApi, tokenService } from "../services/api";
 
 const Login = ({ setUser }) => {
+  const [loginMethod, setLoginMethod] = useState("email"); // "email" or "device"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [deviceCode, setDeviceCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    // Frontend form validation
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
     
@@ -30,22 +32,45 @@ const Login = ({ setUser }) => {
     }
 
     try {
-      setLoading(true);
-
-      // Call login API
       const response = await userApi.login(trimmedEmail, trimmedPassword);
       
-      // Set user data in App state
       setUser({
         email: trimmedEmail,
-        isLoggedIn: true
+        isLoggedIn: true,
+        loginMethod: 'email'
       });
       
-      // Navigate to home page
       navigate("/home");
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.message || "Error processing login. Please try again.");
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeviceLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const trimmedDeviceCode = deviceCode.trim();
+      if (!trimmedDeviceCode) {
+        throw new Error('Device code is required');
+      }
+
+      const response = await userApi.deviceLogin(trimmedDeviceCode);
+      const userData = {
+        email: `Device-${trimmedDeviceCode}`,
+        isLoggedIn: true,
+        isDeviceUser: true
+      };
+      setUser(userData);
+      navigate("/player-home");
+    } catch (err) {
+      console.error("Device login error:", err);
+      setError(err.message || "Device login failed");
     } finally {
       setLoading(false);
     }
@@ -68,38 +93,72 @@ const Login = ({ setUser }) => {
             Please log in to access your account
           </p>
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group password-group">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
-            </div>
-
-            <button type="submit" className="btn login-btn" disabled={loading}>
-              {loading ? "Logging in..." : "Log In"}
+          <div className="login-method-toggle">
+            <button 
+              className={`toggle-btn ${loginMethod === 'email' ? 'active' : ''}`}
+              onClick={() => setLoginMethod('email')}
+            >
+              Email Login
             </button>
-          </form>
+            <button 
+              className={`toggle-btn ${loginMethod === 'device' ? 'active' : ''}`}
+              onClick={() => setLoginMethod('device')}
+            >
+              Device Login
+            </button>
+          </div>
 
-          <p className="register-link">
-            Don't have an account? <Link to="/register">Sign Up</Link>
-          </p>
+          {loginMethod === 'email' ? (
+            <form onSubmit={handleEmailLogin}>
+              <div className="form-group">
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group password-group">
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
+              </div>
+
+              <button type="submit" className="btn login-btn" disabled={loading}>
+                {loading ? "Logging in..." : "Log In"}
+              </button>
+
+              <p className="register-link">
+                Don't have an account? <Link to="/register">Sign Up</Link>
+              </p>
+            </form>
+          ) : (
+            <form onSubmit={handleDeviceLogin}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Device Code"
+                  value={deviceCode}
+                  onChange={(e) => setDeviceCode(e.target.value)}
+                  required
+                />
+              </div>
+
+              <button type="submit" className="btn login-btn" disabled={loading}>
+                {loading ? "Logging in..." : "Login with Device"}
+              </button>
+            </form>
+          )}
 
           {error && <p className="error-text">{error}</p>}
         </div>
