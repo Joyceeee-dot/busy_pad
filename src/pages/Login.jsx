@@ -85,9 +85,9 @@ const Login = ({ setUser }) => {
             </p>
           </form>
 
-          <div className="login-links">
+          {/* <div className="login-links">
             <a href="/device-login">Device Login</a>
-          </div>
+          </div> */}
 
           {error && <p className="error-text">{error}</p>}
         </div>

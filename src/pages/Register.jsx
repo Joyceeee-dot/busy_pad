@@ -102,7 +102,10 @@ const Register = () => {
         } catch (loginError) {
           console.error('Login error after registration:', loginError);
           setErrors({
-            submit: 'Registration successful, but login failed. Please try logging in manually.'
+            submit: { 
+              type: 'success',
+              message: 'Registration successful! Redirecting to login page...'
+            }
           });
           // Redirect to login page after a short delay
           setTimeout(() => {
@@ -112,7 +115,10 @@ const Register = () => {
       } catch (error) {
         console.error('Registration error:', error);
         setErrors({
-          submit: error.message || 'Registration failed. Please try again.'
+          submit: {
+            type: 'error',
+            message: error.message || 'Registration failed. Please try again.'
+          }
         });
       } finally {
         setLoading(false);
@@ -197,7 +203,11 @@ const Register = () => {
               {errors.deviceCode && <p className="error-text">{errors.deviceCode}</p>}
             </div>
 
-            {errors.submit && <p className="error-text submit-error">{errors.submit}</p>}
+            {errors.submit && (
+              <p className={errors.submit.type === 'success' ? 'success-text' : 'error-text'}>
+                {errors.submit.message}
+              </p>
+            )}
 
             <button type="submit" className="register-button" disabled={loading}>
               {loading ? "Creating Account..." : "Register"}

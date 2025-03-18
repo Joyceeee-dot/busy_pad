@@ -57,8 +57,14 @@
 
 .error-text {
     color: #ff4444;
-    font-size: 14px;
-    margin-top: 5px;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.success-text {
+    color: #4CAF50;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
 }
 
 .submit-error {
