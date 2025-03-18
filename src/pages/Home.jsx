@@ -2,39 +2,46 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import GameCard from "../components/GameCard";
 import Navbar from "../components/Navbar";
-import gamesData from "../data/games.json";
+import { gamesApi, tokenService } from "../services/api";
 import "../css/Home.css";
 
 const Home = ({ userId, user, setUser }) => {
   const [games, setGames] = useState([]);
   const [activeTab, setActiveTab] = useState("all-games");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Load Game Data and Check Authentication
+  // Load Game Data
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!isLoggedIn) {
-      navigate('/login');
-      return;
-    }
+    const loadData = async () => {
+      try {
+        const token = tokenService.getToken();
+        if (!token) {
+          navigate('/login');
+          return;
+        }
 
-    // Load saved user data if not already in state
-    if (!user) {
-      const savedUserData = localStorage.getItem("userData");
-      if (savedUserData) {
-        setUser(JSON.parse(savedUserData));
-      } else {
-        navigate('/login');
+        const gamesData = await gamesApi.getAllGames(token);
+        setGames(gamesData);
+        setError(null);
+      } catch (error) {
+        console.error("Error loading data:", error);
+        setError(error.message);
+        if (error.message === 'Session expired') {
+          navigate('/login');
+        }
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    // Set games data
-    setGames(Array.isArray(gamesData) ? gamesData : []);
-  }, [navigate, setUser, user]);
+    loadData();
+  }, [navigate, user]);
 
-  // Show loading state while user data is being loaded
-  if (!user) {
+  // Show loading state while data is being loaded
+  if (loading) {
     return (
       <div className="home-container">
         <div className="loading-text">Loading...</div>
@@ -42,17 +49,16 @@ const Home = ({ userId, user, setUser }) => {
     );
   }
 
-  // Filter games based on user's allowList and category
+  // Filter games based on is_playable and category
   const filteredGames = games.filter(game => 
-    Array.isArray(user.allowList) && 
-    user.allowList.includes(game.id) &&
-    (categoryFilter === "all" || game.category === categoryFilter)
+    game.is_playable &&
+    (categoryFilter === "all" || game.category.toLowerCase() === categoryFilter)
   );
 
   return (
     <div className="home-container">
       <Navbar 
-        userEmail={user.email || 'User'} 
+        userEmail={user?.email || 'User'} 
         activeTab={activeTab} 
         setActiveTab={setActiveTab}
       />
@@ -66,7 +72,7 @@ const Home = ({ userId, user, setUser }) => {
                 className="category-filter"
               >
                 <option value="all">All Categories</option>
-                <option value="entertainment">Entertainment</option>
+                <option value="fun">Entertainment</option>
                 <option value="educational">Education</option>
               </select>
             </div>
@@ -76,8 +82,8 @@ const Home = ({ userId, user, setUser }) => {
               ) : (
                 <p className="no-games-text">
                   {categoryFilter === "all" 
-                    ? "No games in your Allow List. Visit User Management to add games."
-                    : `No ${categoryFilter} games in your Allow List.`}
+                    ? "No games available. Please contact support for assistance."
+                    : `No ${categoryFilter} games available.`}
                 </p>
               )}
             </div>

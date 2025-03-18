@@ -1,44 +1,24 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; 
 import Aurora from "../components/Aurora";
 import "../css/Login.css"; 
-// import { auth } from "../firebase"; we will use this later
-
-// Mock user data for development
-const MOCK_USERS = [
-  {
-    email: "test@example.com",
-    password: "password123",
-    deviceCode: "TEST001",
-    allowList: []
-  }
-];
+import { userApi, tokenService } from "../services/api";
 
 const Login = ({ setUser }) => {
+  const [loginMethod, setLoginMethod] = useState("email"); // "email" or "device"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [deviceCode, setDeviceCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    const savedUserData = localStorage.getItem("userData");
-    
-    if (isLoggedIn && savedUserData) {
-      setUser(JSON.parse(savedUserData));
-      navigate("/home");
-    }
-  }, [navigate, setUser]);
-
-  // submit form
-  const handleSubmit = async (e) => {
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    // Frontend form validation
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
     
@@ -52,36 +32,45 @@ const Login = ({ setUser }) => {
     }
 
     try {
-      setLoading(true);
-
-      // For development, use mock data
-      const user = MOCK_USERS.find(
-        (u) => u.email === trimmedEmail && u.password === trimmedPassword
-      );
-
-      if (user) {
-        // Initialize user data with empty allowList if not present
-        const userData = {
-          ...user,
-          allowList: user.allowList || []
-        };
-
-        // Save user data
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userEmail", user.email);
-        localStorage.setItem("userData", JSON.stringify(userData));
-        
-        // Set user data in App state
-        setUser(userData);
-        
-        // Navigate to home page
-        navigate("/home");
-      } else {
-        setError("Invalid email or password. Please try again.");
-      }
+      const response = await userApi.login(trimmedEmail, trimmedPassword);
+      
+      setUser({
+        email: trimmedEmail,
+        isLoggedIn: true,
+        loginMethod: 'email'
+      });
+      
+      navigate("/home");
     } catch (err) {
       console.error("Login error:", err);
-      setError("Error processing login. Please try again.");
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeviceLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const trimmedDeviceCode = deviceCode.trim();
+      if (!trimmedDeviceCode) {
+        throw new Error('Device code is required');
+      }
+
+      const response = await userApi.deviceLogin(trimmedDeviceCode);
+      const userData = {
+        email: `Device-${trimmedDeviceCode}`,
+        isLoggedIn: true,
+        isDeviceUser: true
+      };
+      setUser(userData);
+      navigate("/player-home");
+    } catch (err) {
+      console.error("Device login error:", err);
+      setError(err.message || "Device login failed");
     } finally {
       setLoading(false);
     }
@@ -104,38 +93,72 @@ const Login = ({ setUser }) => {
             Please log in to access your account
           </p>
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group password-group">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
-            </div>
-
-            <button type="submit" className="btn login-btn" disabled={loading}>
-              {loading ? "Logging in..." : "Log In"}
+          <div className="login-method-toggle">
+            <button 
+              className={`toggle-btn ${loginMethod === 'email' ? 'active' : ''}`}
+              onClick={() => setLoginMethod('email')}
+            >
+              Email Login
             </button>
-          </form>
+            <button 
+              className={`toggle-btn ${loginMethod === 'device' ? 'active' : ''}`}
+              onClick={() => setLoginMethod('device')}
+            >
+              Device Login
+            </button>
+          </div>
 
-          <p className="register-link">
-            Don't have an account? <Link to="/register">Sign Up</Link>
-          </p>
+          {loginMethod === 'email' ? (
+            <form onSubmit={handleEmailLogin}>
+              <div className="form-group">
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group password-group">
+                <input
+                  type="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
+              </div>
+
+              <button type="submit" className="btn login-btn" disabled={loading}>
+                {loading ? "Logging in..." : "Log In"}
+              </button>
+
+              <p className="register-link">
+                Don't have an account? <Link to="/register">Sign Up</Link>
+              </p>
+            </form>
+          ) : (
+            <form onSubmit={handleDeviceLogin}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Device Code"
+                  value={deviceCode}
+                  onChange={(e) => setDeviceCode(e.target.value)}
+                  required
+                />
+              </div>
+
+              <button type="submit" className="btn login-btn" disabled={loading}>
+                {loading ? "Logging in..." : "Login with Device"}
+              </button>
+            </form>
+          )}
 
           {error && <p className="error-text">{error}</p>}
         </div>
