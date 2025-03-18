@@ -1,7 +1,8 @@
 import React from "react";
 import "../css/GameCard.css";
+import { gamesApi, tokenService } from "../services/api";
 
-const GameCard = ({ title, description, image_url, id, is_playable }) => {
+const GameCard = ({ title, description, image_url, id, is_playable, onPlay }) => {
   const handlePlayNow = async () => {
     if (!is_playable) {
       alert("This game is currently locked. Please contact support for access.");
@@ -9,9 +10,18 @@ const GameCard = ({ title, description, image_url, id, is_playable }) => {
     }
 
     try {
-      // TODO: Implement game launch logic
-      console.log(`Launching game: ${title}`);
-      alert(`Game "${title}" is being launched!`);
+      const token = tokenService.getToken();
+      if (!token) {
+        alert("Please log in to play the game.");
+        return;
+      }
+
+      const gameDetails = await gamesApi.getPlayerGameById(token, id);
+      if (gameDetails && gameDetails.url) {
+        onPlay(gameDetails);
+      } else {
+        throw new Error('Game URL not found');
+      }
     } catch (error) {
       console.error("Error launching game:", error);
       alert("An error occurred while launching the game.");

@@ -218,6 +218,33 @@ export const gamesApi = {
         }
     },
 
+    // Get player game by ID
+    getPlayerGameById: async (token, gameId) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/player/games/${gameId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401) {
+                    tokenService.removeToken();
+                    localStorage.removeItem('userData');
+                    throw new Error('Session expired');
+                }
+                throw new Error('Failed to get game details');
+            }
+
+            const game = await response.json();
+            return game;
+        } catch (error) {
+            console.error('Get player game error:', error);
+            throw error;
+        }
+    },
+
     // Get game by ID
     getGameById: async (gameId) => {
         try {
