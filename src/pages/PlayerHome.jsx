@@ -10,6 +10,7 @@ const PlayerHome = ({ user, setUser }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentGame, setCurrentGame] = useState(null);
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,6 +47,11 @@ const PlayerHome = ({ user, setUser }) => {
     setCurrentGame(null);
   };
 
+  // Filter games based on category
+  const filteredGames = games.filter(game => 
+    categoryFilter === "all" || game.category.toLowerCase() === categoryFilter
+  );
+
   if (loading) {
     return (
       <div className="home-container">
@@ -56,7 +62,7 @@ const PlayerHome = ({ user, setUser }) => {
 
   return (
     <div className={`home-container ${currentGame ? 'with-game' : ''}`}>
-      <PlayerNavbar userEmail={user?.email || 'Device User'} />
+      {!currentGame && <PlayerNavbar userEmail={user?.email || 'Device User'} />}
       <div className="content">
         {currentGame ? (
           <div className="game-view">
@@ -77,23 +83,38 @@ const PlayerHome = ({ user, setUser }) => {
             </div>
           </div>
         ) : (
-          <div className="games-grid">
-            {error ? (
-              <p className="error-text">{error}</p>
-            ) : games.length > 0 ? (
-              games.map((game) => (
-                <GameCard 
-                  key={game.id} 
-                  {...game}
-                  onPlay={() => handleGameSelect(game)}
-                />
-              ))
-            ) : (
-              <p className="no-games-text">
-                No games available. Please contact support for assistance.
-              </p>
-            )}
-          </div>
+          <>
+            <div className="filter-container">
+              <select 
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="category-filter"
+              >
+                <option value="all">All Categories</option>
+                <option value="fun">Fun</option>
+                <option value="educational">Education</option>
+              </select>
+            </div>
+            <div className="games-grid">
+              {error ? (
+                <p className="error-text">{error}</p>
+              ) : filteredGames.length > 0 ? (
+                filteredGames.map((game) => (
+                  <GameCard 
+                    key={game.id} 
+                    {...game}
+                    onPlay={() => handleGameSelect(game)}
+                  />
+                ))
+              ) : (
+                <p className="no-games-text">
+                  {categoryFilter === "all" 
+                    ? "No games available. Please contact support for assistance."
+                    : `No ${categoryFilter} games available.`}
+                </p>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>

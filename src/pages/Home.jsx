@@ -72,13 +72,19 @@ const Home = ({ userId, user, setUser }) => {
                 className="category-filter"
               >
                 <option value="all">All Categories</option>
-                <option value="fun">Entertainment</option>
+                <option value="fun">Fun</option>
                 <option value="educational">Education</option>
               </select>
             </div>
             <div className="games-grid">
               {filteredGames.length > 0 ? (
-                filteredGames.map((game) => <GameCard key={game.id} {...game} />)
+                filteredGames.map((game) => (
+                  <GameCard 
+                    key={game.id} 
+                    {...game}
+                    showPlayButton={false}
+                  />
+                ))
               ) : (
                 <p className="no-games-text">
                   {categoryFilter === "all" 
