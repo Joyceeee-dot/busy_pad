@@ -8,6 +8,7 @@ import "./css/App.css"
 import About from "./pages/About";
 import UserManagement from "./pages/UserManagement";
 import PlayerHome from "./pages/PlayerHome";
+import DeviceLogin from "./pages/DeviceLogin";
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -32,6 +33,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/device-login" element={<DeviceLogin setUser={setUser} />} />
         <Route path="/register" element={<Register />} />
         <Route
           path="/home"
