@@ -9,6 +9,7 @@ const PlayerHome = ({ user, setUser }) => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentGame, setCurrentGame] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +38,14 @@ const PlayerHome = ({ user, setUser }) => {
     loadData();
   }, [navigate]);
 
+  const handleGameSelect = (game) => {
+    setCurrentGame(game);
+  };
+
+  const handleCloseGame = () => {
+    setCurrentGame(null);
+  };
+
   if (loading) {
     return (
       <div className="home-container">
@@ -46,25 +55,46 @@ const PlayerHome = ({ user, setUser }) => {
   }
 
   return (
-    <div className="home-container">
+    <div className={`home-container ${currentGame ? 'with-game' : ''}`}>
       <PlayerNavbar userEmail={user?.email || 'Device User'} />
       <div className="content">
-        <div className="games-grid">
-          {error ? (
-            <p className="error-text">{error}</p>
-          ) : games.length > 0 ? (
-            games.map((game) => (
-              <GameCard 
-                key={game.id} 
-                {...game}
+        {currentGame ? (
+          <div className="game-view">
+            <div className="game-header">
+              <h3>{currentGame.title}</h3>
+              <button onClick={handleCloseGame} className="close-button">
+                Back to Games
+              </button>
+            </div>
+            <div className="game-frame-container">
+              <iframe
+                src={currentGame.url}
+                title={currentGame.title}
+                className="game-frame"
+                allow="fullscreen"
+                allowFullScreen
               />
-            ))
-          ) : (
-            <p className="no-games-text">
-              No games available. Please contact support for assistance.
-            </p>
-          )}
-        </div>
+            </div>
+          </div>
+        ) : (
+          <div className="games-grid">
+            {error ? (
+              <p className="error-text">{error}</p>
+            ) : games.length > 0 ? (
+              games.map((game) => (
+                <GameCard 
+                  key={game.id} 
+                  {...game}
+                  onPlay={() => handleGameSelect(game)}
+                />
+              ))
+            ) : (
+              <p className="no-games-text">
+                No games available. Please contact support for assistance.
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
