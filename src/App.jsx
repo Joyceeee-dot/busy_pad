@@ -32,6 +32,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/device-login" element={<DeviceLogin setUser={setUser} />} />
         <Route path="/register" element={<Register />} />
@@ -67,7 +68,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );
